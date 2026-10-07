@@ -1,0 +1,7 @@
+﻿services:
+  zaphkielbot:
+    image: zaphkielbot
+    build:
+      context: .
+      dockerfile: ZaphkielBot/Dockerfile
+
