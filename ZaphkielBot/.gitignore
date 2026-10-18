@@ -9,6 +9,8 @@ local.settings.json
 *.user
 *.userosscache
 *.sln.docstates
+.direnv/
+nohup.out
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
