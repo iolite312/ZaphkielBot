@@ -9,7 +9,6 @@ namespace ZaphkielBot.GitHub;
 
 public enum WebhookOutcome
 {
-    /// <summary>The delivery was understood and (where relevant) queued.</summary>
     Accepted,
     Unauthorized,
     BadRequest
@@ -20,8 +19,7 @@ public interface IGitHubWebhookService
     Task<WebhookOutcome> HandleAsync(string? eventName, string? signature, byte[] body, CancellationToken cancellationToken);
 }
 
-/// <summary>Authenticates GitHub webhook deliveries and turns relevant ones into queued commands.</summary>
-public sealed class GitHubWebhookService(
+public class GitHubWebhookService(
     IGitHubSignatureVerifier signatureVerifier,
     ICommandQueue queue,
     TimeProvider clock,

@@ -5,7 +5,6 @@ using ZaphkielBot.GitHub;
 
 namespace ZaphkielBot.Functions;
 
-/// <summary>Repository webhook target (events: Issues, Issue comments). Authenticated by the HMAC signature, not a function key.</summary>
 public class GitHubWebhookFunction(IGitHubWebhookService service)
 {
     [Function("GitHubWebhook")]

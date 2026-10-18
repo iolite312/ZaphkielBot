@@ -11,11 +11,7 @@ using ZaphkielShared.Queries;
 
 namespace ZaphkielBot.Discord;
 
-/// <summary>
-/// Reads are answered directly through the mediator (query side). Writes are validated, queued and acknowledged
-/// straight away, so Discord's 3 second deadline is always met.
-/// </summary>
-public sealed class IncidentCommandService(
+public class IncidentCommandService(
     IMediator mediator,
     ICommandQueue queue,
     IOptions<DiscordOptions> options,
@@ -107,7 +103,6 @@ public sealed class IncidentCommandService(
 
     private const string InvalidIdMessage = "That doesn't look like an incident id (e.g. INC-a1b2c3d4).";
 
-    /// <summary>Applies the designated-channel rule and turns unexpected failures into a friendly private reply.</summary>
     private async Task<BotReply> GuardAsync(InvocationContext context, string operation, Func<Task<BotReply>> action)
     {
         var designatedChannel = options.Value.IncidentChannelId;

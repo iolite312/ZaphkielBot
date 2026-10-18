@@ -8,8 +8,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielProcessor.Handlers;
 
-/// <summary>Relays a developer's GitHub comment to the Discord channel the incident was reported in.</summary>
-public sealed class RecordGitHubCommentHandler(
+public class RecordGitHubCommentHandler(
     IIncidentReadRepository reader,
     IDiscordNotifier discord,
     ILogger<RecordGitHubCommentHandler> logger) : ICommandHandler<RecordGitHubCommentCommand, Unit>

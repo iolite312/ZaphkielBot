@@ -7,8 +7,7 @@ using ZaphkielShared.Domain;
 
 namespace ZaphkielData.Repositories;
 
-/// <summary>Read side of the incident datastore on Azure Table Storage.</summary>
-public sealed class TableIncidentReadRepository(TableServiceClient tables, IIncidentMapper mapper) : IIncidentReadRepository
+public class TableIncidentReadRepository(TableServiceClient tables, IIncidentMapper mapper) : IIncidentReadRepository
 {
     private readonly TableClient _incidents = tables.GetTableClient(TableNames.Incidents);
     private readonly TableClient _lookup = tables.GetTableClient(TableNames.IncidentLookup);

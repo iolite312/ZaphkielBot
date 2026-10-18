@@ -1,5 +1,6 @@
-using global::Discord.Interactions;
+using Discord.Interactions;
 using Microsoft.Extensions.DependencyInjection;
+using ZaphkielBot.Interfaces;
 
 namespace ZaphkielBot.Discord;
 

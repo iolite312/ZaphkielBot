@@ -7,8 +7,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielData.Storage;
 
-/// <summary>Creates the tables and queues on startup. Retries because Azurite may still be booting in docker compose.</summary>
-public sealed class StorageInitializer(
+public class StorageInitializer(
     TableServiceClient tables,
     QueueServiceClient queues,
     ILogger<StorageInitializer> logger) : IHostedService

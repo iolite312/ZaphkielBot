@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ZaphkielBot.Discord;
 
-/// <summary>Registers the slash commands in the background at startup, so a Discord hiccup never blocks the host from starting.</summary>
-public sealed class SlashCommandRegistrationService(
+public class SlashCommandRegistrationService(
     ISlashCommandRegistrar registrar,
     ILogger<SlashCommandRegistrationService> logger) : BackgroundService
 {

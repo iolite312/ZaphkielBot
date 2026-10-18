@@ -8,7 +8,6 @@ using ZaphkielShared.Queries;
 
 namespace ZaphkielProcessor.Functions;
 
-/// <summary>Query side: read-only endpoints for analytics. Protected by a function key.</summary>
 public class QueryFunctions(IMediator mediator, TimeProvider clock)
 {
     [Function("GetAnalytics")]

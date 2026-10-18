@@ -13,7 +13,6 @@ public static partial class IncidentId
 
     public static string Display(string id) => Prefix + id;
 
-    /// <summary>Accepts "a1b2c3d4" or "INC-A1B2C3D4"; returns the canonical lower-case id or null.</summary>
     public static string? Normalize(string? input)
     {
         var match = Pattern().Match(input?.Trim() ?? string.Empty);

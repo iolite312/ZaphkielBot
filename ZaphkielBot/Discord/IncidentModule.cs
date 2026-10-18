@@ -1,21 +1,17 @@
-using global::Discord;
-using global::Discord.Interactions;
-using global::Discord.Rest;
+using Discord;
+using Discord.Interactions;
+using Discord.Rest;
 
 namespace ZaphkielBot.Discord;
 
-/// <summary>
-/// The /incident slash commands (REST module base: the first response is returned as the HTTP response body). Deliberately thin: it only translates between Discord.Net and
-/// <see cref="IIncidentCommandService"/>, which holds the actual logic.
-/// </summary>
 [Group("incident", "Report and track incidents")]
-public sealed class IncidentModule(IIncidentCommandService incidents) : RestInteractionModuleBase<RestInteractionContext>
+public class IncidentModule(IIncidentCommandService incidents) : RestInteractionModuleBase<RestInteractionContext>
 {
     [SlashCommand("report", "Report a new incident")]
     public Task ReportAsync(
         [Summary("title", "Short summary"), MinLength(3), MaxLength(100)] string title,
         [Summary("severity", "How bad is it?")]
-        [Choice("SEV1 - Critical", "critical"), Choice("SEV2 - High", "high"), Choice("SEV3 - Medium", "medium"), Choice("SEV4 - Low", "low")]
+        [Choice("Critical", "critical"), Choice("High", "high"), Choice("Medium", "medium"), Choice("Low", "low")]
         string severity,
         [Summary("description", "What is happening?"), MaxLength(1500)] string? description = null) =>
         ReplyAsync(incidents.ReportAsync(Invocation(), title, severity, description, CancellationToken.None));

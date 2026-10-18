@@ -4,7 +4,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielCore.Cqrs;
 
-public sealed class Mediator(IServiceProvider services) : IMediator
+public class Mediator(IServiceProvider services) : IMediator
 {
     private static readonly ConcurrentDictionary<Type, object> CommandDispatchers = new();
     private static readonly ConcurrentDictionary<Type, object> QueryDispatchers = new();
@@ -34,7 +34,7 @@ public sealed class Mediator(IServiceProvider services) : IMediator
         public abstract Task<TResponse> Dispatch(object command, IServiceProvider services, CancellationToken ct);
     }
 
-    private sealed class CommandDispatcher<TCommand, TResponse> : CommandDispatcher<TResponse>
+    private class CommandDispatcher<TCommand, TResponse> : CommandDispatcher<TResponse>
         where TCommand : ICommand<TResponse>
     {
         public override Task<TResponse> Dispatch(object command, IServiceProvider services, CancellationToken ct) =>
@@ -46,7 +46,7 @@ public sealed class Mediator(IServiceProvider services) : IMediator
         public abstract Task<TResponse> Dispatch(object query, IServiceProvider services, CancellationToken ct);
     }
 
-    private sealed class QueryDispatcher<TQuery, TResponse> : QueryDispatcher<TResponse>
+    private class QueryDispatcher<TQuery, TResponse> : QueryDispatcher<TResponse>
         where TQuery : IQuery<TResponse>
     {
         public override Task<TResponse> Dispatch(object query, IServiceProvider services, CancellationToken ct) =>

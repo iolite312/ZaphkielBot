@@ -8,7 +8,7 @@ using ZaphkielShared.Options;
 
 namespace ZaphkielProcessor.GitHub;
 
-public sealed class GitHubRestClient : IGitHubIssueClient
+public class GitHubRestClient : IGitHubIssueClient
 {
     private readonly HttpClient _http;
     private readonly string _issuesPath;

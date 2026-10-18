@@ -2,13 +2,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using ZaphkielBot.Discord;
+using ZaphkielBot.Interfaces;
 
 namespace ZaphkielBot.Functions;
 
-/// <summary>
-/// Discord "Interactions Endpoint URL". Anonymous at the HTTP level on purpose: Discord cannot send a function key,
-/// the Ed25519 signature checked by Discord.Net is the authentication.
-/// </summary>
 public class DiscordInteractionFunction(IDiscordInteractionHandler handler)
 {
     [Function("DiscordInteraction")]

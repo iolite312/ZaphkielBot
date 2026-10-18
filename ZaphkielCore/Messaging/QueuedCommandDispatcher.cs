@@ -5,7 +5,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielCore.Messaging;
 
-public sealed class QueuedCommandDispatcher(
+public class QueuedCommandDispatcher(
     IMediator mediator,
     IQueueMessageSerializer serializer,
     ILogger<QueuedCommandDispatcher> logger) : IQueuedCommandDispatcher

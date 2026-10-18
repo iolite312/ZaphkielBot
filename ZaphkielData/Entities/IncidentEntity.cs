@@ -3,8 +3,7 @@ using Azure.Data.Tables;
 
 namespace ZaphkielData.Entities;
 
-/// <summary>Table row for the Incidents table. Keys are described in <see cref="IncidentKeys"/>.</summary>
-public sealed class IncidentEntity : ITableEntity
+public class IncidentEntity : ITableEntity
 {
     public string PartitionKey { get; set; } = string.Empty;
     public string RowKey { get; set; } = string.Empty;

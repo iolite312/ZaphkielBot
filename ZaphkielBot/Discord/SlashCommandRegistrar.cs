@@ -1,11 +1,11 @@
-using global::Discord.Interactions;
+using Discord.Interactions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ZaphkielShared.Options;
 
 namespace ZaphkielBot.Discord;
 
-public sealed class SlashCommandRegistrar(
+public class SlashCommandRegistrar(
     IDiscordRestClientProvider provider,
     InteractionService interactions,
     IOptions<DiscordOptions> options,

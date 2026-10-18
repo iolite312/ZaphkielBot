@@ -5,10 +5,9 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielData.Queues;
 
-/// <summary>Wire format of a queue message: the command's type name plus its JSON payload.</summary>
-public sealed class JsonQueueMessageSerializer : IQueueMessageSerializer
+public class JsonQueueMessageSerializer : IQueueMessageSerializer
 {
-    private sealed record Envelope(string Type, JsonElement Payload);
+    private record Envelope(string Type, JsonElement Payload);
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {

@@ -12,7 +12,6 @@ namespace ZaphkielData;
 
 public static class DataServiceCollectionExtensions
 {
-    /// <summary>The Functions host already requires this setting for queue triggers, so it doubles as the datastore connection.</summary>
     public const string StorageConnectionSetting = "AzureWebJobsStorage";
 
     public static IServiceCollection AddZaphkielData(this IServiceCollection services, IConfiguration configuration)

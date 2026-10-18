@@ -1,16 +1,16 @@
 using System.Text.Json;
-using global::Discord;
-using global::Discord.Interactions;
-using global::Discord.Rest;
+using Discord;
+using Discord.Interactions;
+using Discord.Rest;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ZaphkielBot.Interfaces;
 using ZaphkielShared.Options;
 
 namespace ZaphkielBot.Discord;
 
-/// <summary>Discord.Net does the heavy lifting: Ed25519 verification, parsing, routing to the slash command modules.</summary>
-public sealed class DiscordInteractionHandler(
+public class DiscordInteractionHandler(
     IDiscordRestClientProvider provider,
     InteractionService interactions,
     IServiceScopeFactory scopes,

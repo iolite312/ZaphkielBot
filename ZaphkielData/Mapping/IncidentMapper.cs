@@ -3,7 +3,7 @@ using ZaphkielShared.Domain;
 
 namespace ZaphkielData.Mapping;
 
-public sealed class IncidentMapper : IIncidentMapper
+public class IncidentMapper : IIncidentMapper
 {
     public IncidentEntity ToEntity(Incident i) => new()
     {

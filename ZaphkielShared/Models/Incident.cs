@@ -1,6 +1,6 @@
 namespace ZaphkielShared.Domain;
 
-public sealed class Incident
+public class Incident
 {
     public const int MinTitleLength = 3;
     public const int MaxTitleLength = 100;
@@ -41,7 +41,6 @@ public sealed class Incident
         ResolvedAt = resolvedAt;
     }
 
-    /// <summary>Returns a human readable validation error, or null when the input is acceptable.</summary>
     public static string? ValidateReport(string? title, string? description)
     {
         var trimmedTitle = title?.Trim() ?? string.Empty;
@@ -68,7 +67,6 @@ public sealed class Incident
             reporterId, reporterName, channelId, null, null, reportedAt.ToUniversalTime(), null);
     }
 
-    /// <summary>Rebuilds an incident from persisted state without re-running the reporting rules.</summary>
     public static Incident Rehydrate(
         string id, string title, string description, Severity severity, IncidentStatus status,
         string reporterId, string reporterName, string channelId,

@@ -4,7 +4,7 @@ using ZaphkielShared.Queries;
 
 namespace ZaphkielCore.Queries;
 
-public sealed class GetIncidentHandler(IIncidentReadRepository incidents) : IQueryHandler<GetIncidentQuery, IncidentView?>
+public class GetIncidentHandler(IIncidentReadRepository incidents) : IQueryHandler<GetIncidentQuery, IncidentView?>
 {
     public async Task<IncidentView?> Handle(GetIncidentQuery query, CancellationToken cancellationToken)
     {

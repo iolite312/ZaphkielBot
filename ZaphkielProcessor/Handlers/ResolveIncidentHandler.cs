@@ -8,7 +8,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielProcessor.Handlers;
 
-public sealed class ResolveIncidentHandler(
+public class ResolveIncidentHandler(
     IIncidentReadRepository reader,
     IIncidentWriteRepository writer,
     IGitHubIssueClient gitHub,

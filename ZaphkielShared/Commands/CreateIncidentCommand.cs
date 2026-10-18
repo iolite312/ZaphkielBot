@@ -3,7 +3,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielShared.Commands;
 
-public sealed record CreateIncidentCommand(
+public record CreateIncidentCommand(
     string IncidentId,
     string Title,
     string? Description,

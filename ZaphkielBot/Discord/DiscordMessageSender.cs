@@ -1,9 +1,8 @@
-using global::Discord;
+using Discord;
 
 namespace ZaphkielBot.Discord;
 
-/// <summary>Posts messages into a channel through Discord.Net.</summary>
-public sealed class DiscordMessageSender(IDiscordRestClientProvider provider) : IDiscordMessageSender
+public class DiscordMessageSender(IDiscordRestClientProvider provider) : IDiscordMessageSender
 {
     public async Task SendAsync(string channelId, string content, CancellationToken cancellationToken)
     {

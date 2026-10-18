@@ -4,10 +4,6 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielProcessor.Functions;
 
-/// <summary>
-/// Command side. Each queue has its own trigger so they scale and poison independently.
-/// An exception makes the runtime retry the message (5 attempts) and then park it in "&lt;queue&gt;-poison".
-/// </summary>
 public class QueueProcessorFunctions(IQueuedCommandDispatcher dispatcher)
 {
     private const string Connection = "AzureWebJobsStorage";

@@ -5,8 +5,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielBot.Handlers;
 
-/// <summary>Executes <see cref="SendDiscordMessageCommand"/>s queued by the processor.</summary>
-public sealed class SendDiscordMessageHandler(IDiscordMessageSender sender) : ICommandHandler<SendDiscordMessageCommand, Unit>
+public class SendDiscordMessageHandler(IDiscordMessageSender sender) : ICommandHandler<SendDiscordMessageCommand, Unit>
 {
     public async Task<Unit> Handle(SendDiscordMessageCommand command, CancellationToken cancellationToken)
     {

@@ -3,9 +3,9 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielShared.Queries;
 
-public sealed record GetIncidentQuery(string IncidentId) : IQuery<IncidentView?>;
+public record GetIncidentQuery(string IncidentId) : IQuery<IncidentView?>;
 
-public sealed record IncidentView(
+public record IncidentView(
     string Id,
     string Title,
     string Description,

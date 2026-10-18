@@ -8,11 +8,7 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielProcessor.Handlers;
 
-/// <summary>
-/// Logs the incident, opens the tracking issue on GitHub and links the two.
-/// Queue delivery is at-least-once, so every step tolerates being run again.
-/// </summary>
-public sealed class CreateIncidentHandler(
+public class CreateIncidentHandler(
     IIncidentReadRepository reader,
     IIncidentWriteRepository writer,
     IGitHubIssueClient gitHub,
@@ -78,6 +74,5 @@ public sealed class CreateIncidentHandler(
          _Comments on this issue are relayed to Discord. Closing the issue resolves the incident._
          """;
 
-    /// <summary>Stops user supplied text from pinging GitHub users or teams.</summary>
     private static string NeutralizeMentions(string text) => text.Replace("@", "@​");
 }

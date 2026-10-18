@@ -1,11 +1,11 @@
-using global::Discord;
-using global::Discord.Rest;
+using Discord;
+using Discord.Rest;
 using Microsoft.Extensions.Options;
 using ZaphkielShared.Options;
 
 namespace ZaphkielBot.Discord;
 
-public sealed class DiscordRestClientProvider(IOptions<DiscordOptions> options) : IDiscordRestClientProvider, IDisposable
+public class DiscordRestClientProvider(IOptions<DiscordOptions> options) : IDiscordRestClientProvider, IDisposable
 {
     private readonly SemaphoreSlim _login = new(1, 1);
 

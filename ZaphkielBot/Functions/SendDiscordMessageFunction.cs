@@ -4,10 +4,6 @@ using ZaphkielShared.Messaging;
 
 namespace ZaphkielBot.Functions;
 
-/// <summary>
-/// Posts the messages the processor asked for (issue links, GitHub comments, resolutions) into Discord.
-/// Failures are retried by the runtime (5 attempts) and then parked in "discord-notifications-poison".
-/// </summary>
 public class SendDiscordMessageFunction(IQueuedCommandDispatcher dispatcher)
 {
     [Function("SendDiscordMessage")]

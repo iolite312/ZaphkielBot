@@ -1,6 +1,5 @@
 namespace ZaphkielCore.Formatting;
 
-/// <summary>Pure text helpers shared by the apps (no dependencies, so nothing to mock).</summary>
 public static class MessageFormat
 {
     public static string Truncate(string text, int maxLength) =>

@@ -8,8 +8,7 @@ public enum ResolutionSource
     GitHub
 }
 
-/// <summary>Identify the incident either by its id (Discord) or by its GitHub issue number (webhook).</summary>
-public sealed record ResolveIncidentCommand(
+public record ResolveIncidentCommand(
     string? IncidentId,
     int? GitHubIssueNumber,
     string ResolvedBy,

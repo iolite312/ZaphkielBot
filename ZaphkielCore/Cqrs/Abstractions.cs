@@ -12,7 +12,6 @@ public interface IQueryHandler<in TQuery, TResponse> where TQuery : IQuery<TResp
     Task<TResponse> Handle(TQuery query, CancellationToken cancellationToken);
 }
 
-/// <summary>Single entry point that routes commands and queries to their handlers.</summary>
 public interface IMediator
 {
     Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default);

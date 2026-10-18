@@ -5,8 +5,7 @@ using ZaphkielShared.Queries;
 
 namespace ZaphkielCore.Queries;
 
-/// <summary>Severity breakdown and MTTR (mean time to resolve) for incidents created in a period.</summary>
-public sealed class GetAnalyticsHandler(IIncidentReadRepository incidents) : IQueryHandler<GetAnalyticsQuery, AnalyticsReport>
+public class GetAnalyticsHandler(IIncidentReadRepository incidents) : IQueryHandler<GetAnalyticsQuery, AnalyticsReport>
 {
     public async Task<AnalyticsReport> Handle(GetAnalyticsQuery query, CancellationToken cancellationToken)
     {

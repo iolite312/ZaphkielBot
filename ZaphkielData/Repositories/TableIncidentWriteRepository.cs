@@ -7,8 +7,7 @@ using ZaphkielShared.Domain;
 
 namespace ZaphkielData.Repositories;
 
-/// <summary>Write side of the incident datastore on Azure Table Storage.</summary>
-public sealed class TableIncidentWriteRepository(TableServiceClient tables, IIncidentMapper mapper) : IIncidentWriteRepository
+public class TableIncidentWriteRepository(TableServiceClient tables, IIncidentMapper mapper) : IIncidentWriteRepository
 {
     private readonly TableClient _incidents = tables.GetTableClient(TableNames.Incidents);
     private readonly TableClient _lookup = tables.GetTableClient(TableNames.IncidentLookup);
