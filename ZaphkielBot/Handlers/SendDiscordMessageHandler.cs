@@ -10,7 +10,7 @@ public class SendDiscordMessageHandler(IDiscordMessageSender sender) : ICommandH
 {
     public async Task<Unit> Handle(SendDiscordMessageCommand command, CancellationToken cancellationToken)
     {
-        await sender.SendAsync(command.ChannelId, command.Content, cancellationToken);
+        await sender.SendAsync(command.ChannelId, command.Embed, cancellationToken);
         return Unit.Value;
     }
 }

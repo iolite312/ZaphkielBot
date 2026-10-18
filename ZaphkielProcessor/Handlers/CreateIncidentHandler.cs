@@ -45,9 +45,18 @@ public class CreateIncidentHandler(
 
         try
         {
-            await discord.PostMessageAsync(
+            await discord.PostEmbedAsync(
                 incident.ChannelId,
-                $"🎫 **{IncidentId.Display(incident.Id)}** is now tracked as GitHub issue #{issue.Number}: {issue.Url}",
+                new EmbedMessage(
+                    $"🎫 {IncidentId.Display(incident.Id)} is tracked on GitHub",
+                    incident.Title,
+                    issue.Url,
+                    EmbedStyles.For(incident.Severity),
+                    [
+                        new EmbedField("Severity", incident.Severity.Label()),
+                        new EmbedField("GitHub issue", $"[#{issue.Number}]({issue.Url})")
+                    ],
+                    "Comments on the issue are relayed here"),
                 cancellationToken);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)

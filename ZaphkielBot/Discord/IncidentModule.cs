@@ -6,7 +6,7 @@ using ZaphkielBot.Interfaces;
 namespace ZaphkielBot.Discord;
 
 [Group("incident", "Report and track incidents")]
-public class IncidentModule(IIncidentCommandService incidents) : RestInteractionModuleBase<RestInteractionContext>
+public class IncidentModule(IIncidentCommandService incidents, IEmbedMapper embeds) : RestInteractionModuleBase<RestInteractionContext>
 {
     [SlashCommand("report", "Report a new incident")]
     public Task ReportAsync(
@@ -37,6 +37,6 @@ public class IncidentModule(IIncidentCommandService incidents) : RestInteraction
     private async Task ReplyAsync(Task<BotReply> reply)
     {
         var result = await reply;
-        await RespondAsync(result.Content, ephemeral: result.Ephemeral, allowedMentions: AllowedMentions.None);
+        await RespondAsync(embed: embeds.Build(result.Embed), ephemeral: result.Ephemeral, allowedMentions: AllowedMentions.None);
     }
 }

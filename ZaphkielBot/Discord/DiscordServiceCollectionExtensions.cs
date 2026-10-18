@@ -23,6 +23,7 @@ public static class DiscordServiceCollectionExtensions
 
         services.AddScoped<IIncidentCommandService, IncidentCommandService>();
         services.AddScoped<IDiscordInteractionHandler, DiscordInteractionHandler>();
+        services.AddSingleton<IEmbedMapper, DiscordEmbedMapper>();
         services.AddSingleton<IDiscordMessageSender, DiscordMessageSender>();
 
         services.AddSingleton<ISlashCommandRegistrar, SlashCommandRegistrar>();

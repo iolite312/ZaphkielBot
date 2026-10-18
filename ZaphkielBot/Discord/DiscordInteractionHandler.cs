@@ -14,11 +14,12 @@ public class DiscordInteractionHandler(
     IDiscordRestClientProvider provider,
     InteractionService interactions,
     IServiceScopeFactory scopes,
+    IEmbedMapper embeds,
     IOptions<DiscordOptions> options,
     ILogger<DiscordInteractionHandler> logger) : IDiscordInteractionHandler
 {
     private const string FallbackError =
-        """{"type":4,"data":{"content":"⚠️ Something went wrong on my side. Please try again in a moment.","flags":64}}""";
+        """{"type":4,"data":{"embeds":[{"title":"⚠️ Something went wrong","description":"Please try again in a moment.","color":15548997}],"flags":64}}""";
 
     public async Task<InteractionResult> HandleAsync(
         string? signature, string? timestamp, byte[] body, CancellationToken cancellationToken)
@@ -63,7 +64,7 @@ public class DiscordInteractionHandler(
         if (!response.Task.IsCompleted)
         {
             logger.LogError("Interaction was not answered ({Error}: {Reason})", result.Error, result.ErrorReason);
-            await ((IDiscordInteraction)interaction).RespondAsync("⚠️ Something went wrong on my side. Please try again in a moment.", ephemeral: true);
+            await ((IDiscordInteraction)interaction).RespondAsync(embed: embeds.Build(BotReply.Failed().Embed), ephemeral: true);
             response.TrySetResult(FallbackError);
         }
 

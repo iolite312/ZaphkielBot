@@ -46,9 +46,19 @@ public class ResolveIncidentHandler(
         var where = command.Source == ResolutionSource.GitHub ? "closed on GitHub" : "resolved";
         try
         {
-            await discord.PostMessageAsync(
+            await discord.PostEmbedAsync(
                 incident.ChannelId,
-                $"✅ **{IncidentId.Display(incident.Id)}** {where} by **{command.ResolvedBy}**. Time to resolve: {MessageFormat.Duration(incident.TimeToResolve!.Value)}.",
+                new EmbedMessage(
+                    $"✅ {IncidentId.Display(incident.Id)} {where}",
+                    incident.Title,
+                    incident.GitHubIssueUrl,
+                    EmbedStyle.Success,
+                    [
+                        new EmbedField("Resolved by", command.ResolvedBy),
+                        new EmbedField("Time to resolve", MessageFormat.Duration(incident.TimeToResolve!.Value)),
+                        new EmbedField("Severity", incident.Severity.Label())
+                    ],
+                    Timestamp: incident.ResolvedAt),
                 cancellationToken);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)

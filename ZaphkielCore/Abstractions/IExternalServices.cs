@@ -1,4 +1,5 @@
 using ZaphkielShared.GitHub;
+using ZaphkielShared.Models;
 
 namespace ZaphkielCore.Abstractions;
 
@@ -10,7 +11,7 @@ public interface IGitHubIssueClient
 
 public interface IDiscordNotifier
 {
-    Task PostMessageAsync(string channelId, string content, CancellationToken cancellationToken);
+    Task PostEmbedAsync(string channelId, EmbedMessage embed, CancellationToken cancellationToken);
 }
 
 public interface IGitHubSignatureVerifier

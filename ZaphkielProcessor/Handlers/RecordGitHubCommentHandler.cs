@@ -14,8 +14,7 @@ public class RecordGitHubCommentHandler(
     IDiscordNotifier discord,
     ILogger<RecordGitHubCommentHandler> logger) : ICommandHandler<RecordGitHubCommentCommand, Unit>
 {
-    private const int MaxMessageLength = 2000; // Discord limit
-    private const int MaxQuotedLength = 1500;
+    private const int MaxBodyLength = 1500;
 
     public async Task<Unit> Handle(RecordGitHubCommentCommand command, CancellationToken cancellationToken)
     {
@@ -26,16 +25,18 @@ public class RecordGitHubCommentHandler(
             return Unit.Value;
         }
 
-        var header = $"💬 **{command.Author}** commented on **{IncidentId.Display(incident.Id)}** ({command.Url}):\n";
-        var message = MessageFormat.Truncate(header + Quote(command.Body), MaxMessageLength);
+        var body = command.Body.Trim();
 
-        await discord.PostMessageAsync(incident.ChannelId, message, cancellationToken);
+        await discord.PostEmbedAsync(
+            incident.ChannelId,
+            new EmbedMessage(
+                $"💬 New comment on {IncidentId.Display(incident.Id)}",
+                body.Length == 0 ? "_Empty comment_" : MessageFormat.Truncate(body, MaxBodyLength),
+                command.Url,
+                EmbedStyle.Neutral,
+                [new EmbedField("Commenter", command.Author)],
+                incident.Title),
+            cancellationToken);
         return Unit.Value;
-    }
-
-    private static string Quote(string body)
-    {
-        var text = MessageFormat.Truncate(body.Trim(), MaxQuotedLength);
-        return string.Join('\n', text.ReplaceLineEndings("\n").Split('\n').Select(line => "> " + line));
     }
 }

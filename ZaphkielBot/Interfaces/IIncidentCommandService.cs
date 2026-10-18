@@ -1,11 +1,19 @@
+using ZaphkielShared.Models;
+
 namespace ZaphkielBot.Interfaces;
 
 public record InvocationContext(string ChannelId, string UserId, string UserName);
 
-public record BotReply(string Content, bool Ephemeral = false)
+public record BotReply(EmbedMessage Embed, bool Ephemeral = false)
 {
-    public static BotReply Public(string content) => new(content);
-    public static BotReply Private(string content) => new(content, Ephemeral: true);
+    public static BotReply Public(EmbedMessage embed) => new(embed);
+    public static BotReply Private(EmbedMessage embed) => new(embed, Ephemeral: true);
+
+    public static BotReply Refused(string reason) =>
+        Private(new EmbedMessage("⚠️ Can't do that", reason, Style: EmbedStyle.Warning));
+
+    public static BotReply Failed() =>
+        Private(new EmbedMessage("⚠️ Something went wrong", "Please try again in a moment.", Style: EmbedStyle.Danger));
 }
 
 public interface IIncidentCommandService

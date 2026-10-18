@@ -1,11 +1,12 @@
 using Discord;
 using ZaphkielBot.Interfaces;
+using ZaphkielShared.Models;
 
 namespace ZaphkielBot.Discord;
 
-public class DiscordMessageSender(IDiscordRestClientProvider provider) : IDiscordMessageSender
+public class DiscordMessageSender(IDiscordRestClientProvider provider, IEmbedMapper embeds) : IDiscordMessageSender
 {
-    public async Task SendAsync(string channelId, string content, CancellationToken cancellationToken)
+    public async Task SendAsync(string channelId, EmbedMessage embed, CancellationToken cancellationToken)
     {
         if (!ulong.TryParse(channelId, out var id))
             throw new ArgumentException($"'{channelId}' is not a valid Discord channel id.", nameof(channelId));
@@ -17,6 +18,6 @@ public class DiscordMessageSender(IDiscordRestClientProvider provider) : IDiscor
                       ?? throw new InvalidOperationException($"Channel {channelId} was not found or cannot receive messages.");
 
         // AllowedMentions.None: relayed text can never ping @everyone, roles or users.
-        await channel.SendMessageAsync(content, allowedMentions: AllowedMentions.None, options: options);
+        await channel.SendMessageAsync(embed: embeds.Build(embed), allowedMentions: AllowedMentions.None, options: options);
     }
 }
