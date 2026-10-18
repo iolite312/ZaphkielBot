@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
-using ZaphkielProcessor.GitHub;
+using ZaphkielBot.GitHub;
 
-namespace ZaphkielProcessor.Functions;
+namespace ZaphkielBot.Functions;
 
 /// <summary>Repository webhook target (events: Issues, Issue comments). Authenticated by the HMAC signature, not a function key.</summary>
 public class GitHubWebhookFunction(IGitHubWebhookService service)

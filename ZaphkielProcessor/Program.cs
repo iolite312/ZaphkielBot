@@ -36,8 +36,6 @@ builder.Services
     .AddZaphkielData(builder.Configuration)
     .AddHandlersFromAssembly(typeof(CreateIncidentHandler).Assembly);
 
-builder.Services.AddSingleton<IGitHubSignatureVerifier, GitHubSignatureVerifier>();
-builder.Services.AddScoped<IGitHubWebhookService, GitHubWebhookService>();
 builder.Services.AddHttpClient<IGitHubIssueClient, GitHubRestClient>();
 
 builder.Build().Run();

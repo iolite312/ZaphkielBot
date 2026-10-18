@@ -6,8 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry;
 using ZaphkielBot.Discord;
+using ZaphkielBot.GitHub;
 using ZaphkielBot.Handlers;
 using ZaphkielCore;
+using ZaphkielCore.Abstractions;
 using ZaphkielCore.Cqrs;
 using ZaphkielData;
 using ZaphkielShared.Options;
@@ -31,9 +33,19 @@ builder.Services
     .ValidateOnStart();
 
 builder.Services
+    .AddOptions<GitHubWebhookOptions>()
+    .Bind(builder.Configuration.GetSection(GitHubWebhookOptions.Section))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services
     .AddZaphkielCore()
     .AddZaphkielData(builder.Configuration)
     .AddHandlersFromAssembly(typeof(SendDiscordMessageHandler).Assembly)
     .AddZaphkielDiscord();
+
+// GitHub webhooks arrive on the same public URL as the Discord interactions.
+builder.Services.AddSingleton<IGitHubSignatureVerifier, GitHubSignatureVerifier>();
+builder.Services.AddScoped<IGitHubWebhookService, GitHubWebhookService>();
 
 builder.Build().Run();

@@ -4,9 +4,9 @@ using Microsoft.Extensions.Options;
 using ZaphkielCore.Abstractions;
 using ZaphkielShared.Options;
 
-namespace ZaphkielProcessor.GitHub;
+namespace ZaphkielBot.GitHub;
 
-public sealed class GitHubSignatureVerifier(IOptions<GitHubOptions> options) : IGitHubSignatureVerifier
+public sealed class GitHubSignatureVerifier(IOptions<GitHubWebhookOptions> options) : IGitHubSignatureVerifier
 {
     private const string Prefix = "sha256=";
     private readonly byte[] _secret = Encoding.UTF8.GetBytes(options.Value.WebhookSecret);

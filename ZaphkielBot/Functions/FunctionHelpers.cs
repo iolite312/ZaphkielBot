@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace ZaphkielProcessor.Functions;
+namespace ZaphkielBot.Functions;
 
 internal static class FunctionHelpers
 {

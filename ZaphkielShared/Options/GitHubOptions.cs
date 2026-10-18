@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ZaphkielShared.Options;
 
+/// <summary>Settings for calling the GitHub API (processor only).</summary>
 public sealed class GitHubOptions
 {
     public const string Section = "GitHub";
@@ -15,8 +16,4 @@ public sealed class GitHubOptions
 
     [Required]
     public string Repository { get; set; } = string.Empty;
-
-    /// <summary>Shared secret configured on the repository webhook. Authenticates every delivery.</summary>
-    [Required, MinLength(16)]
-    public string WebhookSecret { get; set; } = string.Empty;
 }

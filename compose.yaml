@@ -1,4 +1,4 @@
-# Each app only receives the settings it needs (the processor never sees Discord secrets, the bot never sees GitHub's).
+# Each app only receives the settings it needs (the processor never sees Discord secrets, the bot never sees the GitHub token).
 # ${VAR:-} values come from .env, see .env.example.
 
 x-storage: &storage
@@ -17,7 +17,8 @@ services:
     volumes:
       - azurite-data:/data
 
-  # Discord side: slash command endpoint + the queue function that posts messages into Discord.
+  # Public side: the single URL Discord and GitHub both call (slash commands + GitHub webhook),
+  # plus the queue function that posts messages into Discord.
   zaphkielbot:
     image: zaphkielbot
     build:
@@ -31,12 +32,13 @@ services:
       Discord__BotToken: ${Discord__BotToken:-}
       Discord__IncidentChannelId: ${Discord__IncidentChannelId:-}
       Discord__GuildId: ${Discord__GuildId:-}
+      GitHub__WebhookSecret: ${GitHub__WebhookSecret:-}
     ports:
-      - "7071:80" # POST /api/discord/interactions
+      - "7071:80" # POST /api/discord/interactions and POST /api/github/webhook
     depends_on:
       - azurite
 
-  # Processing side: queue processors, GitHub webhook and the analytics endpoints.
+  # Processing side: queue processors and the analytics endpoints. Needs no public URL.
   zaphkielprocessor:
     image: zaphkielprocessor
     build:
@@ -48,9 +50,8 @@ services:
       GitHub__Token: ${GitHub__Token:-}
       GitHub__Owner: ${GitHub__Owner:-}
       GitHub__Repository: ${GitHub__Repository:-}
-      GitHub__WebhookSecret: ${GitHub__WebhookSecret:-}
     ports:
-      - "7072:80" # POST /api/github/webhook, GET /api/analytics, GET /api/incidents/{id}
+      - "7072:80" # GET /api/analytics, GET /api/incidents/{id}
     depends_on:
       - azurite
 

@@ -16,14 +16,12 @@ public class DiscordInteractionFunction(IDiscordInteractionHandler handler)
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "discord/interactions")] HttpRequest req,
         CancellationToken cancellationToken)
     {
-        // Signatures cover the exact bytes sent, so the body is read raw.
-        using var buffer = new MemoryStream();
-        await req.Body.CopyToAsync(buffer, cancellationToken);
+        var body = await FunctionHelpers.ReadBodyAsync(req, cancellationToken);
 
         var result = await handler.HandleAsync(
             req.Headers["X-Signature-Ed25519"].ToString(),
             req.Headers["X-Signature-Timestamp"].ToString(),
-            buffer.ToArray(),
+            body,
             cancellationToken);
 
         return result.Outcome switch

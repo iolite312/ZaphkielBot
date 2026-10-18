@@ -5,7 +5,7 @@ using ZaphkielShared.Commands;
 using ZaphkielShared.GitHub;
 using ZaphkielShared.Messaging;
 
-namespace ZaphkielProcessor.GitHub;
+namespace ZaphkielBot.GitHub;
 
 public enum WebhookOutcome
 {
