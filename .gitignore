@@ -4,3 +4,8 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .idea
+
+# secrets and local tooling
+.env
+.direnv/
+nohup.out
