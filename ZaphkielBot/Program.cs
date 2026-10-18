@@ -5,8 +5,8 @@ using Microsoft.Azure.Functions.Worker.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry;
-using ZaphkielBot.Core;
-using ZaphkielBot.Infrastructure;
+using ZaphkielBotCore;
+using ZaphkielBotInfrastructure;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using ZaphkielBot.Core.Cqrs;
+using ZaphkielBotCore.Cqrs;
 
 namespace ZaphkielBot.Tests.Queries;
 
@@ -49,12 +49,12 @@ public class MediatorTests
     [Fact]
     public void Assembly_scan_registers_every_core_handler()
     {
-        var services = new ServiceCollection().AddCqrs(typeof(ZaphkielBot.Core.CoreServiceCollectionExtensions).Assembly);
+        var services = new ServiceCollection().AddCqrs(typeof(ZaphkielBotCore.CoreServiceCollectionExtensions).Assembly);
 
-        Assert.Contains(services, d => d.ServiceType == typeof(ICommandHandler<ZaphkielBot.Core.Commands.CreateIncidentCommand, Unit>));
-        Assert.Contains(services, d => d.ServiceType == typeof(ICommandHandler<ZaphkielBot.Core.Commands.ResolveIncidentCommand, Unit>));
-        Assert.Contains(services, d => d.ServiceType == typeof(ICommandHandler<ZaphkielBot.Core.Commands.RecordGitHubCommentCommand, Unit>));
-        Assert.Contains(services, d => d.ServiceType == typeof(IQueryHandler<ZaphkielBot.Core.Queries.GetAnalyticsQuery, ZaphkielBot.Core.Queries.AnalyticsReport>));
-        Assert.Contains(services, d => d.ServiceType == typeof(IQueryHandler<ZaphkielBot.Core.Queries.GetIncidentQuery, ZaphkielBot.Core.Queries.IncidentView?>));
+        Assert.Contains(services, d => d.ServiceType == typeof(ICommandHandler<ZaphkielBotCore.Commands.CreateIncidentCommand, Unit>));
+        Assert.Contains(services, d => d.ServiceType == typeof(ICommandHandler<ZaphkielBotCore.Commands.ResolveIncidentCommand, Unit>));
+        Assert.Contains(services, d => d.ServiceType == typeof(ICommandHandler<ZaphkielBotCore.Commands.RecordGitHubCommentCommand, Unit>));
+        Assert.Contains(services, d => d.ServiceType == typeof(IQueryHandler<ZaphkielBotCore.Queries.GetAnalyticsQuery, ZaphkielBotCore.Queries.AnalyticsReport>));
+        Assert.Contains(services, d => d.ServiceType == typeof(IQueryHandler<ZaphkielBotCore.Queries.GetIncidentQuery, ZaphkielBotCore.Queries.IncidentView?>));
     }
 }

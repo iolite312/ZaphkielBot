@@ -2,9 +2,9 @@ using System.Globalization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ZaphkielBot.Core.Cqrs;
-using ZaphkielBot.Core.Domain;
-using ZaphkielBot.Core.Queries;
+using ZaphkielBotCore.Cqrs;
+using ZaphkielBotCore.Domain;
+using ZaphkielBotCore.Queries;
 
 namespace ZaphkielBot.Functions;
 

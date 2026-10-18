@@ -1,7 +1,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ZaphkielBot.Core.Discord;
+using ZaphkielBotCore.Discord;
 
 namespace ZaphkielBot.Functions;
 

@@ -1,4 +1,4 @@
-using ZaphkielBot.Core.Domain;
+using ZaphkielBotCore.Domain;
 using ZaphkielBot.Tests.Fakes;
 
 namespace ZaphkielBot.Tests;

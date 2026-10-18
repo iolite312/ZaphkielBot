@@ -5,9 +5,9 @@ using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Security;
-using ZaphkielBot.Core.Discord;
-using ZaphkielBot.Core.GitHub;
-using ZaphkielBot.Infrastructure.Security;
+using ZaphkielBotCore.Discord;
+using ZaphkielBotCore.GitHub;
+using ZaphkielBotInfrastructure.Security;
 
 namespace ZaphkielBot.Tests.Infrastructure;
 

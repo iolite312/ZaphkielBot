@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
-using ZaphkielBot.Core.Abstractions;
-using ZaphkielBot.Core.Domain;
+using ZaphkielBotCore.Abstractions;
+using ZaphkielBotCore.Domain;
 
 namespace ZaphkielBot.Tests.Fakes;
 

@@ -1,7 +1,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ZaphkielBot.Core.GitHub;
+using ZaphkielBotCore.GitHub;
 
 namespace ZaphkielBot.Functions;
 

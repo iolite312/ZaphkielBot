@@ -1,9 +1,9 @@
 using System.Text;
 using Microsoft.Extensions.Logging.Abstractions;
-using ZaphkielBot.Core.Abstractions;
-using ZaphkielBot.Core.Commands;
-using ZaphkielBot.Core.GitHub;
-using ZaphkielBot.Core.Messaging;
+using ZaphkielBotCore.Abstractions;
+using ZaphkielBotCore.Commands;
+using ZaphkielBotCore.GitHub;
+using ZaphkielBotCore.Messaging;
 using ZaphkielBot.Tests.Fakes;
 
 namespace ZaphkielBot.Tests.GitHub;

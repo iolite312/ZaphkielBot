@@ -1,5 +1,5 @@
 using Microsoft.Azure.Functions.Worker;
-using ZaphkielBot.Core.Messaging;
+using ZaphkielBotCore.Messaging;
 
 namespace ZaphkielBot.Functions;
 

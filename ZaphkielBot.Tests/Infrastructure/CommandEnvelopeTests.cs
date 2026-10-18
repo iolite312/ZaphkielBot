@@ -1,6 +1,6 @@
-using ZaphkielBot.Core.Commands;
-using ZaphkielBot.Core.Domain;
-using ZaphkielBot.Core.Messaging;
+using ZaphkielBotCore.Commands;
+using ZaphkielBotCore.Domain;
+using ZaphkielBotCore.Messaging;
 using ZaphkielBot.Tests.Fakes;
 
 namespace ZaphkielBot.Tests.Infrastructure;

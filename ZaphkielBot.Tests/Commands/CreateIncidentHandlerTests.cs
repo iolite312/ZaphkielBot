@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
-using ZaphkielBot.Core.Abstractions;
-using ZaphkielBot.Core.Commands;
-using ZaphkielBot.Core.Domain;
+using ZaphkielBotCore.Abstractions;
+using ZaphkielBotCore.Commands;
+using ZaphkielBotCore.Domain;
 using ZaphkielBot.Tests.Fakes;
 
 namespace ZaphkielBot.Tests.Commands;

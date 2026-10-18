@@ -1,5 +1,5 @@
-using ZaphkielBot.Core.Domain;
-using ZaphkielBot.Core.Queries;
+using ZaphkielBotCore.Domain;
+using ZaphkielBotCore.Queries;
 using ZaphkielBot.Tests.Fakes;
 
 namespace ZaphkielBot.Tests.Queries;

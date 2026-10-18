@@ -1,4 +1,4 @@
-using ZaphkielBot.Core.Abstractions;
+using ZaphkielBotCore.Abstractions;
 
 namespace ZaphkielBot.Tests.Fakes;
 

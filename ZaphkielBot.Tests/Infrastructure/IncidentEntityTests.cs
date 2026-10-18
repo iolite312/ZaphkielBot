@@ -1,5 +1,5 @@
-using ZaphkielBot.Core.Domain;
-using ZaphkielBot.Infrastructure.Storage;
+using ZaphkielBotCore.Domain;
+using ZaphkielBotInfrastructure.Storage;
 using ZaphkielBot.Tests.Fakes;
 
 namespace ZaphkielBot.Tests.Infrastructure;

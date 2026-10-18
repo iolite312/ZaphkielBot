@@ -1,4 +1,4 @@
-using ZaphkielBot.Core.Messaging;
+using ZaphkielBotCore.Messaging;
 
 namespace ZaphkielBot.Tests.Fakes;
 

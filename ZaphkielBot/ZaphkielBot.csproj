@@ -27,8 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ZaphkielBot.Core\ZaphkielBot.Core.csproj" />
-      <ProjectReference Include="..\ZaphkielBot.Infrastructure\ZaphkielBot.Infrastructure.csproj" />
+      <ProjectReference Include="..\ZaphkielBotCore\ZaphkielBotCore.csproj" />
+      <ProjectReference Include="..\ZaphkielBotInfrastructure\ZaphkielBotInfrastructure.csproj" />
     </ItemGroup>
 
 </Project>
