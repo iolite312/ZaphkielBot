@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AzureFunctionsVersion>V4</AzureFunctionsVersion>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.52.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Storage.Queues" Version="5.5.5" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.OpenTelemetry" Version="1.2.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.3" />
+        <PackageReference Include="Azure.Monitor.OpenTelemetry.Exporter" Version="1.7.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ZaphkielCore\ZaphkielCore.csproj" />
+        <ProjectReference Include="..\ZaphkielData\ZaphkielData.csproj" />
+        <ProjectReference Include="..\ZaphkielShared\ZaphkielShared.csproj" />
+    </ItemGroup>
+
+</Project>

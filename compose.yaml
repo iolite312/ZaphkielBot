@@ -1,3 +1,11 @@
+# Each app only receives the settings it needs (the processor never sees Discord secrets, the bot never sees GitHub's).
+# ${VAR:-} values come from .env, see .env.example.
+
+x-storage: &storage
+  FUNCTIONS_WORKER_RUNTIME: dotnet-isolated
+  # Azurite's well-known development account (public, not a secret), pointed at the azurite container.
+  AzureWebJobsStorage: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;"
+
 services:
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
@@ -9,18 +17,40 @@ services:
     volumes:
       - azurite-data:/data
 
+  # Discord side: slash command endpoint + the queue function that posts messages into Discord.
   zaphkielbot:
     image: zaphkielbot
     build:
       context: .
       dockerfile: ZaphkielBot/Dockerfile
-    env_file: .env # Discord / GitHub settings and secrets, see .env.example
     environment:
-      FUNCTIONS_WORKER_RUNTIME: dotnet-isolated
-      # Azurite's well-known development account (public, not a secret), pointed at the azurite container.
-      AzureWebJobsStorage: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;"
+      <<: *storage
+      # Two apps share one storage account, so each needs its own host id (keys and leases are stored per host id).
+      AzureFunctionsWebHost__hostid: zaphkielbot
+      Discord__PublicKey: ${Discord__PublicKey:-}
+      Discord__BotToken: ${Discord__BotToken:-}
+      Discord__IncidentChannelId: ${Discord__IncidentChannelId:-}
+      Discord__GuildId: ${Discord__GuildId:-}
     ports:
-      - "7071:80"
+      - "7071:80" # POST /api/discord/interactions
+    depends_on:
+      - azurite
+
+  # Processing side: queue processors, GitHub webhook and the analytics endpoints.
+  zaphkielprocessor:
+    image: zaphkielprocessor
+    build:
+      context: .
+      dockerfile: ZaphkielProcessor/Dockerfile
+    environment:
+      <<: *storage
+      AzureFunctionsWebHost__hostid: zaphkielprocessor
+      GitHub__Token: ${GitHub__Token:-}
+      GitHub__Owner: ${GitHub__Owner:-}
+      GitHub__Repository: ${GitHub__Repository:-}
+      GitHub__WebhookSecret: ${GitHub__WebhookSecret:-}
+    ports:
+      - "7072:80" # POST /api/github/webhook, GET /api/analytics, GET /api/incidents/{id}
     depends_on:
       - azurite
 

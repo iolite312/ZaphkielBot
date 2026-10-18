@@ -5,9 +5,11 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+# Project files first, so the restore layer is cached until a dependency changes.
 COPY ["ZaphkielBot/ZaphkielBot.csproj", "ZaphkielBot/"]
-COPY ["ZaphkielBot.Core/ZaphkielBot.Core.csproj", "ZaphkielBot.Core/"]
-COPY ["ZaphkielBot.Infrastructure/ZaphkielBot.Infrastructure.csproj", "ZaphkielBot.Infrastructure/"]
+COPY ["ZaphkielCore/ZaphkielCore.csproj", "ZaphkielCore/"]
+COPY ["ZaphkielData/ZaphkielData.csproj", "ZaphkielData/"]
+COPY ["ZaphkielShared/ZaphkielShared.csproj", "ZaphkielShared/"]
 RUN dotnet restore "ZaphkielBot/ZaphkielBot.csproj"
 COPY . .
 WORKDIR "/src/ZaphkielBot"

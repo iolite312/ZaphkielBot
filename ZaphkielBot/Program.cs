@@ -5,8 +5,12 @@ using Microsoft.Azure.Functions.Worker.OpenTelemetry;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry;
-using ZaphkielBotCore;
-using ZaphkielBotInfrastructure;
+using ZaphkielBot.Discord;
+using ZaphkielBot.Handlers;
+using ZaphkielCore;
+using ZaphkielCore.Cqrs;
+using ZaphkielData;
+using ZaphkielShared.Options;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -19,9 +23,17 @@ if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHT
         .UseAzureMonitorExporter();
 }
 
-// Business tier (Core) + data tier (Infrastructure). The functions below are only the entry points.
+// Fail at startup, with a clear message, instead of on the first slash command.
+builder.Services
+    .AddOptions<DiscordOptions>()
+    .Bind(builder.Configuration.GetSection(DiscordOptions.Section))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 builder.Services
     .AddZaphkielCore()
-    .AddZaphkielInfrastructure(builder.Configuration);
+    .AddZaphkielData(builder.Configuration)
+    .AddHandlersFromAssembly(typeof(SendDiscordMessageHandler).Assembly)
+    .AddZaphkielDiscord();
 
 builder.Build().Run();

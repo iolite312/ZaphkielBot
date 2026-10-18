@@ -11,57 +11,65 @@ issue is opened on GitHub, and developer comments on that issue are relayed back
 /incident stats                                        -> counts per severity and MTTR, last 30 days
 ```
 
-## Architecture
+## Projects
 
-```
-Discord ──POST /api/discord/interactions──► DiscordInteraction (HTTP fn) ──► DiscordInteractionService
-                                              verifies Ed25519 signature        │ queries answered directly (read side)
-                                                                                │ commands enqueued, instant reply
-                                                                                ▼
-                                                              Storage Queue  incident-commands
-                                                                                ▼
-                                       ProcessIncidentCommand (queue fn) ──► mediator ──► CreateIncident / ResolveIncident handlers
-                                                                                │            ├─ Azure Table Storage (Incidents, IncidentLookup)
-                                                                                │            ├─ GitHub REST API (open / close issue)
-                                                                                │            └─ Discord REST API (announcements)
-GitHub ──POST /api/github/webhook──► GitHubWebhook (HTTP fn) ──► GitHubWebhookService
-          verifies HMAC-SHA256        issue_comment created / issues closed
-                                                                                ▼
-                                                              Storage Queue  github-events
-                                                                                ▼
-                                       ProcessGitHubEvent (queue fn) ──► RecordGitHubComment / ResolveIncident handlers ──► Discord channel
-
-GET /api/analytics?from=&to=   GET /api/incidents/{id}   (HTTP fns, function key)  ──► query handlers ──► Table Storage
-```
-
-| Project | Tier | Contents |
+| Project | Role | Contents |
 |---|---|---|
-| `ZaphkielBot` | entry points | the 6 Azure Functions (thin: read request, call a service, map the result) |
-| `ZaphkielBot.Core` | business tier | domain model + validation, CQRS commands/queries/handlers, mediator, interaction & webhook services, interfaces |
-| `ZaphkielBot.Infrastructure` | data tier | Table Storage store, Storage Queue, GitHub/Discord HTTP clients, signature verifiers |
-| `ZaphkielBot.Tests` | | xUnit tests using stubs/mocks only (no Azure, no network) |
+| `ZaphkielShared` | models | domain (`Incident`, `Severity`…), command/query/view records, GitHub models, options. No dependencies. |
+| `ZaphkielCore` | abstractions + behaviour | every interface (repositories, queue, GitHub/Discord clients, serializer…), the mediator, the queue dispatcher, the shared query handlers |
+| `ZaphkielData` | data tier | Table Storage repositories (read and write), entities, mappers, queue publisher, queue message serializer, storage initializer |
+| `ZaphkielBot` | Azure Functions app – Discord | `DiscordInteraction` (HTTP) and `SendDiscordMessage` (queue) functions, the Discord.Net slash command module, the business logic behind it |
+| `ZaphkielProcessor` | Azure Functions app – processing | `ProcessIncidentCommand` + `ProcessGitHubEvent` (queue), `GitHubWebhook` (HTTP), `GetAnalytics` + `GetIncident` (HTTP), the command handlers, GitHub client |
+| `ZaphkielTests` | | xUnit tests, only stubs/mocks (no Azure, no network) |
+
+References: Shared ← Core ← Data ← {Bot, Processor}. Everything talks to everything else through interfaces from Core.
+
+## Flow
+
+```
+Discord ──POST /api/discord/interactions──► [Bot] DiscordInteraction ──► Discord.Net (Ed25519 check, routing) ──► IncidentModule
+                                                                                    │ reads: mediator ► query handlers ► Table Storage
+                                                                                    │ writes: validated, queued, instant reply
+                                                                                    ▼
+                                                                  queue  incident-commands
+                                                                                    ▼
+                  [Processor] ProcessIncidentCommand ──► mediator ──► CreateIncident / ResolveIncident handlers
+                                                                         ├─ Table Storage (Incidents, IncidentLookup)
+                                                                         ├─ GitHub REST API (open / close issue)
+                                                                         └─ IDiscordNotifier ──► queue discord-notifications ─┐
+GitHub ──POST /api/github/webhook──► [Processor] GitHubWebhook (HMAC-SHA256 check)                                           │
+          issue_comment created / issues closed ──► queue github-events                                                       │
+                  [Processor] ProcessGitHubEvent ──► RecordGitHubComment / ResolveIncident handlers ──► IDiscordNotifier ─────┤
+                                                                                                                              ▼
+                                            [Bot] SendDiscordMessage ──► SendDiscordMessageHandler ──► Discord.Net ──► the incident's channel
+```
+
+The processor never talks to Discord: it asks for messages through the `discord-notifications` queue, so a Discord outage
+never fails incident processing, and the Discord token only exists in the bot.
 
 ### Rubric mapping
 
 - **Cloud database architecture** – Table Storage. `Incidents`: PartitionKey = creation month, RowKey = reversed ticks + id
   (newest first). Analytics read one partition per month with a RowKey range, never a table scan. `IncidentLookup` is a
-  secondary index (by incident id, spread over up to 256 partitions; by GitHub issue number) so webhooks can find an
-  incident by point read. Stores `Severity`, `CreatedAt`, `ResolvedAt` for severity breakdowns and MTTR.
-- **N-tier / Azure Functions** – see the table above; 6 functions (2 HTTP webhooks, 2 queue processors, 2 query endpoints).
-- **Loosely coupled** – Core depends only on interfaces (`IIncidentReader/Writer`, `IGitHubIssueClient`, `IDiscordNotifier`,
-  `ICommandQueue`, signature verifiers); every handler and service is unit tested with stubs and NSubstitute mocks.
-- **CQRS** – `ICommand`/`IQuery` with separate handlers, a hand-written mediator (`Core/Cqrs`), separate read and write store
-  interfaces, and commands travelling through Azure Storage Queues (one queue per producer so GitHub bursts never delay incident intake).
+  secondary index (by incident id, spread over up to 256 partitions; by GitHub issue number) so webhooks find an incident
+  with point reads. `Severity`, `CreatedAt`, `ResolvedAt` are stored for severity breakdowns and MTTR (`ZaphkielData/Entities/IncidentKeys.cs`).
+- **N-tier / Azure Functions** – data tier (`ZaphkielData`), business tier (`ZaphkielCore` + handlers/services in the apps),
+  entry points are thin Functions: 7 in total across two Function apps.
+- **Loosely coupled / testable** – every dependency is an interface; handlers and services are unit tested with stubs and
+  NSubstitute mocks, and the Discord pipeline is tested end-to-end with real signed requests but no network.
+- **CQRS** – `ICommand`/`IQuery` with separate handlers, a hand-written mediator (`ZaphkielCore/Cqrs`), separate read and
+  write repositories, and commands travelling through three Azure Storage Queues.
 
 ### Security
 
-- No secrets in code or git: `.env` (git-ignored) locally, Application Settings / Key Vault references in Azure.
-  Options are validated at startup, so a missing secret fails fast with a clear message.
-- Both public endpoints are authenticated by signature, not by obscurity: Discord Ed25519 and GitHub HMAC-SHA256
-  (constant-time compare, computed over the raw body bytes). Unsigned or tampered requests get 401 and queue nothing.
+- No secrets in code or git: `.env` (git-ignored) locally, Application Settings / Key Vault references in Azure. Options are
+  validated at startup, so a missing secret fails fast with a clear message.
+- Least privilege: compose gives the bot only Discord settings and the processor only GitHub settings.
+- Both public endpoints authenticate by signature: Discord Ed25519 (checked by Discord.Net) and GitHub HMAC-SHA256
+  (constant-time compare over the raw body). Unsigned or tampered requests get 401 and queue nothing.
 - Query endpoints require a function key.
 - GitHub token: fine-grained PAT limited to one repo, "Issues: read/write" only.
-- Relayed text cannot ping anyone: Discord messages send `allowed_mentions: {parse: []}`; `@` is neutralised in GitHub issue bodies.
+- Relayed text cannot ping anyone: every Discord message is sent with empty allowed mentions; `@` is neutralised in GitHub issue bodies.
 - Slash commands are restricted to the designated channel (`Discord__IncidentChannelId`).
 
 ## Running it
@@ -70,15 +78,14 @@ GET /api/analytics?from=&to=   GET /api/incidents/{id}   (HTTP fns, function key
    (scopes `bot` + `applications.commands`, permission *Send Messages* in the incident channel).
 2. **GitHub**: create a fine-grained PAT (one repo, Issues read/write).
 3. Fill in `.env` (see `.env.example` for where each value comes from).
-4. `docker compose up --build` – starts Azurite and the Functions app on <http://localhost:7071>.
-5. `scripts/register-discord-commands.sh` – registers `/incident` in your server.
-6. Discord and GitHub must reach your machine over public HTTPS, e.g. `cloudflared tunnel --url http://localhost:7071`
-   (or a Dev Tunnel / ngrok). Then:
-   - Discord → *General Information* → **Interactions Endpoint URL** = `https://<tunnel>/api/discord/interactions`
-   - GitHub repo → *Settings → Webhooks*: payload URL `https://<tunnel>/api/github/webhook`, content type
+4. `docker compose up --build` – starts Azurite, the bot on <http://localhost:7071> and the processor on <http://localhost:7072>.
+   The bot registers the `/incident` commands in your server by itself on startup (set `Discord__GuildId` for instant registration).
+5. Discord and GitHub must reach your machine over public HTTPS, e.g. `cloudflared tunnel --url http://localhost:7071`
+   (and a second tunnel for 7072), or Dev Tunnels / ngrok. Then:
+   - Discord → *General Information* → **Interactions Endpoint URL** = `https://<bot-tunnel>/api/discord/interactions`
+   - GitHub repo → *Settings → Webhooks*: payload URL `https://<processor-tunnel>/api/github/webhook`, content type
      `application/json`, secret = `GitHub__WebhookSecret`, events: **Issues** and **Issue comments**.
-7. Analytics: `GET /api/analytics?from=2026-10-01&to=2026-10-31` needs a function key (`?code=…`; in the local container the
-   keys live in Azurite's blob storage – easiest is to try it after deploying to Azure).
+6. Analytics: `GET /api/analytics?from=2026-10-01&to=2026-10-31` on the processor needs a function key (`?code=…`).
 
 Tests: `dotnet test`
 
@@ -87,5 +94,6 @@ Tests: `dotnet test`
 - Queue delivery is at-least-once. Handlers are idempotent, except that a crash between "GitHub issue created" and
   "issue number saved" would open a duplicate issue on retry.
 - Updates use last-writer-wins (`ETag.All`); a comment and a resolve racing on the same incident could in theory overwrite each other's fields.
-- Messages that fail 5 times land in `<queue>-poison` (e.g. a bad GitHub token); nothing processes them automatically.
+- Messages that fail 5 times land in `<queue>-poison` (e.g. a bad token); nothing processes them automatically.
+- Discord.Net refuses interactions older than 3 seconds (Discord's own deadline), so a cold start that slow shows "application did not respond".
 - The `IncidentLookup` GitHub-issue partition (`gh`) is a single partition – fine for one repository, would need sharding for many.
