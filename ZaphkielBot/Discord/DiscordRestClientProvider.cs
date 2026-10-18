@@ -1,6 +1,7 @@
 using Discord;
 using Discord.Rest;
 using Microsoft.Extensions.Options;
+using ZaphkielBot.Interfaces;
 using ZaphkielShared.Options;
 
 namespace ZaphkielBot.Discord;

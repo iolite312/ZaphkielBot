@@ -2,9 +2,10 @@ using Microsoft.Extensions.Logging;
 using ZaphkielCore.Abstractions;
 using ZaphkielCore.Cqrs;
 using ZaphkielShared.Commands;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
 using ZaphkielShared.GitHub;
 using ZaphkielShared.Messaging;
+using ZaphkielShared.Models;
 
 namespace ZaphkielProcessor.Handlers;
 

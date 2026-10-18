@@ -3,7 +3,8 @@ using Azure.Data.Tables;
 using ZaphkielCore.Abstractions;
 using ZaphkielData.Entities;
 using ZaphkielData.Mapping;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
+using ZaphkielShared.Models;
 
 namespace ZaphkielData.Repositories;
 

@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using ZaphkielCore.Cqrs;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
+using ZaphkielShared.Models;
 using ZaphkielShared.Queries;
 
 namespace ZaphkielProcessor.Functions;

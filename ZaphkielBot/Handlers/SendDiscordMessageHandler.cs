@@ -1,4 +1,5 @@
 using ZaphkielBot.Discord;
+using ZaphkielBot.Interfaces;
 using ZaphkielCore.Cqrs;
 using ZaphkielShared.Commands;
 using ZaphkielShared.Messaging;

@@ -1,4 +1,5 @@
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
+using ZaphkielShared.Models;
 
 namespace ZaphkielCore.Abstractions;
 

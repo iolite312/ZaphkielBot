@@ -1,11 +1,13 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ZaphkielBot.Interfaces;
 using ZaphkielCore.Abstractions;
 using ZaphkielCore.Cqrs;
 using ZaphkielCore.Formatting;
 using ZaphkielShared.Commands;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
 using ZaphkielShared.Messaging;
+using ZaphkielShared.Models;
 using ZaphkielShared.Options;
 using ZaphkielShared.Queries;
 

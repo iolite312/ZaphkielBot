@@ -1,4 +1,4 @@
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
 using ZaphkielShared.Messaging;
 
 namespace ZaphkielShared.Commands;

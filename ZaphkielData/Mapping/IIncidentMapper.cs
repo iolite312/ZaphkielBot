@@ -1,5 +1,6 @@
 using ZaphkielData.Entities;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
+using ZaphkielShared.Models;
 
 namespace ZaphkielData.Mapping;
 

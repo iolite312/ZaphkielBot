@@ -1,6 +1,6 @@
 using Discord.Rest;
 
-namespace ZaphkielBot.Discord;
+namespace ZaphkielBot.Interfaces;
 
 public interface IDiscordRestClientProvider
 {

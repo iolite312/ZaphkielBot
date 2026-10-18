@@ -1,4 +1,4 @@
-namespace ZaphkielBot.Discord;
+namespace ZaphkielBot.Interfaces;
 
 public record InvocationContext(string ChannelId, string UserId, string UserName);
 

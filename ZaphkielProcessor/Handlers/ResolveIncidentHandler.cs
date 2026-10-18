@@ -3,8 +3,9 @@ using ZaphkielCore.Abstractions;
 using ZaphkielCore.Cqrs;
 using ZaphkielCore.Formatting;
 using ZaphkielShared.Commands;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
 using ZaphkielShared.Messaging;
+using ZaphkielShared.Models;
 
 namespace ZaphkielProcessor.Handlers;
 

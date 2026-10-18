@@ -1,4 +1,4 @@
-namespace ZaphkielBot.Discord;
+namespace ZaphkielBot.Interfaces;
 
 public interface IDiscordMessageSender
 {

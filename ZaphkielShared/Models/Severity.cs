@@ -1,4 +1,4 @@
-namespace ZaphkielShared.Domain;
+namespace ZaphkielShared.Models;
 
 public enum Severity
 {

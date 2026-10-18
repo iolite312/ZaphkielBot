@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace ZaphkielShared.Domain;
+namespace ZaphkielShared.Models;
 
 public static partial class IncidentId
 {

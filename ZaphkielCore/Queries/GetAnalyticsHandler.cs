@@ -1,6 +1,7 @@
 using ZaphkielCore.Abstractions;
 using ZaphkielCore.Cqrs;
-using ZaphkielShared.Domain;
+using ZaphkielShared.Models;
+using ZaphkielShared.Models;
 using ZaphkielShared.Queries;
 
 namespace ZaphkielCore.Queries;
