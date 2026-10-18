@@ -19,8 +19,6 @@ public static class SeverityExtensions
         _ => severity.ToString()
     };
 
-    public static string GitHubLabel(this Severity severity) => $"sev{(int)severity}";
-
     public static bool TryParseSeverity(string? value, out Severity severity) =>
         Enum.TryParse(value, ignoreCase: true, out severity) && Enum.IsDefined(severity);
 }

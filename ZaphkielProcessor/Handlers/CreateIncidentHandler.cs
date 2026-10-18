@@ -35,7 +35,7 @@ public class CreateIncidentHandler(
             new NewGitHubIssue(
                 $"[{IncidentId.Display(incident.Id)}] {incident.Title}",
                 BuildIssueBody(incident),
-                ["incident", incident.Severity.GitHubLabel()]),
+                [GitHubLabels.Incident, GitHubLabels.For(incident.Severity)]),
             cancellationToken);
 
         incident.LinkGitHubIssue(issue.Number, issue.Url);

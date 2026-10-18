@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace ZaphkielShared.GitHub;
 
-public record NewGitHubIssue(string Title, string Body, IReadOnlyList<string> Labels);
+public record NewGitHubIssue(string Title, string Body, IReadOnlyList<GitHubLabel> Labels);
 
 public record GitHubIssue(int Number, string Url);
 
