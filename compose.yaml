@@ -1,6 +1,3 @@
-# Each app only receives the settings it needs (the processor never sees Discord secrets, the bot never sees the GitHub token).
-# ${VAR:-} values come from .env, see .env.example.
-
 x-storage: &storage
   FUNCTIONS_WORKER_RUNTIME: dotnet-isolated
   # Azurite's well-known development account (public, not a secret), pointed at the azurite container.
@@ -17,8 +14,6 @@ services:
     volumes:
       - azurite-data:/data
 
-  # Public side: the single URL Discord and GitHub both call (slash commands + GitHub webhook),
-  # plus the queue function that posts messages into Discord.
   zaphkielbot:
     image: zaphkielbot
     build:
@@ -26,13 +21,12 @@ services:
       dockerfile: ZaphkielBot/Dockerfile
     environment:
       <<: *storage
-      # Two apps share one storage account, so each needs its own host id (keys and leases are stored per host id).
-      AzureFunctionsWebHost__hostid: zaphkielbot
-      Discord__PublicKey: ${Discord__PublicKey:-}
-      Discord__BotToken: ${Discord__BotToken:-}
-      Discord__IncidentChannelId: ${Discord__IncidentChannelId:-}
-      Discord__GuildId: ${Discord__GuildId:-}
-      GitHub__WebhookSecret: ${GitHub__WebhookSecret:-}
+      AzureFunctionsWebHost_hostid: zaphkielbot
+      Discord__PublicKey: ${Discord_PublicKey:-}
+      Discord__BotToken: ${Discord_BotToken:-}
+      Discord__IncidentChannelId: ${Discord_IncidentChannelId:-}
+      Discord__GuildId: ${Discord_GuildId:-}
+      GitHub__WebhookSecret: ${GitHub_WebhookSecret:-}
     ports:
       - "7071:80" # POST /api/discord/interactions and POST /api/github/webhook
     depends_on:
@@ -46,12 +40,12 @@ services:
       dockerfile: ZaphkielProcessor/Dockerfile
     environment:
       <<: *storage
-      AzureFunctionsWebHost__hostid: zaphkielprocessor
-      GitHub__Token: ${GitHub__Token:-}
-      GitHub__Owner: ${GitHub__Owner:-}
-      GitHub__Repository: ${GitHub__Repository:-}
+      AzureFunctionsWebHost_hostid: zaphkielprocessor
+      GitHub__Token: ${GitHub_Token:-}
+      GitHub__Owner: ${GitHub_Owner:-}
+      GitHub__Repository: ${GitHub_Repository:-}
     ports:
-      - "7072:80" # GET /api/analytics, GET /api/incidents/{id}
+      - "7072:80"
     depends_on:
       - azurite
 
